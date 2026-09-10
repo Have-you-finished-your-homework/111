@@ -1,60 +1,67 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+<meta charset="utf-8">
+<title>文档标题</title>
 </head>
 <body>
-<h1>大大的吃大粪</h1>
-<h2>中中的有序吃大粪</h2>
-  <p>1111111111111111111111111111</p>
-  <div></div>
-  11111111111111111111111111111111111
-  <div>22222222222222222222222222222222222222222222222</div>
-  <div></div>
-  11111111111111111111111111111111111111111111111111111111111111111111111<div>
-  </div>
-  1111111111111111111111111111111111111
-  <div></div>
-<strong>粗粗的大粪不要抢大粪呀！</strong>
-<em>别抢我的斜体大粪</em>
-<span></span><p>我喜欢 <span style="color: red;">红色</span> 和 <span style="color: blue;">蓝色</span>。</p>
-<div></div>
-1<br>1
-1<hr> style="color: red;">1额好像改不了颜色
-  <hr>
-<mark>很亮的施</mark>
-<small>小号屎</small>
-<sub>下屎</sub>
-<sup>上屎</sup>
-<code>123456细细的屎？</code>
-<pre>保留格式的屎
-啥意思
-哦哦卧槽可以留下我的回车
-</pre>
-  <pre>
-  /\_/\
- ( o.o )
- </pre>
-<blockquote>引用块123456合着就多一个缩进呗 好吧行距也变了</blockquote>
-  <blockquote cite="https://example.com">
-  <p>想象力比知识更重要。因为知识是有限的，而想象力概括着世界上的一切，推动着进步，并且是知识进化的源泉。</p>
-</blockquote>
-<q>短引用1111给两端加个引号就是</q>
-<abbr title="HyperText Markup Language">HTML</abbr>
-<br>
-  <abbr title="好乖好乖奖励你大粪" >把鼠标放过来</abbr>
-<cite>作品名</cite>
-<time>2026-09-10</time>
-  <h3>Hello World卧槽真有3级标题</h3>
-  <h4>hello world </h4>
-  <h5>hello world</h5>
-  <h6>hello world</h6>
-  <h7>hello world好吧七级开始就是正文了啊</h7>
- <br> <h8>hello world</h8><br>
-  <h9>有9级标题吗 感觉和正文没区别</h9>
-<h100>hello world额好吧没有区别了后面的都</h100>
-  <script src="script.js"></script>
-</body>
+  按 <kbd>Ctrl</kbd> + <kbd>S</kbd> 保存
+	<h1>我的第一个HTML页面</h1>
+	<p>我的第一个段落。</p>
+<ruby>汉<rt>hàn</rt>字<rt>zì</rt></ruby><br>
+  H<sub>2</sub>O
+  <details>
+  <summary>点我展开</summary>
+  <p>这里是折叠内容。</p>
+  </details>
+  <dialog >
+  <p>我是一个 dialog，加 open 就显示。</p>
+</dialog>
+  <details>
+  <summary>更多信息</summary>
+  <ul>
+    <li>第一条</li>
+    <li>第二条</li>
+  </ul>
+</details>
+  <progress value=32 max="100">10%</progress>
+<meter value="0.10" min="0" max="1">70%</meter>
+  <fieldset>
+  <legend>登录信息</legend>
+  <input type="text" list="names" placeholder="选择名字">
+  <datalist id="names">
+    <option value="1"></option>
+    <option value="2"></option>
+    <option value="3"></option>
+  </datalist>
+  <fieldset>
+  <legend>登录信息</legend>
+
+  <input type="text" list="names" placeholder="输入名字">
+  <datalist id="names">
+    <option value="小明"></option>
+    <option value="小红"></option>
+    <option value="小刚"></option>
+  </datalist>
+
+  <input type="password" placeholder="密码">
+  <input type="checkbox"> 记住我
+  <button type="submit">提交</button>
+</fieldset>
+ 
+    <svg width="100" height="100">
+  <circle cx="50" cy="50" r="45" fill="lightblue" stroke="red" stroke-width="10" />
+</svg>
+
+<canvas id="cv" width="100" height="100"></canvas>
+<script>
+  const canvas = document.getElementById('cv');
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = 'red';
+  ctx.fillRect(10, 10, 50, 50);
+</script>
+    <iframe srcdoc="<h3>Hello iframe</h3><p>我是嵌进来的小页面</p>"></iframe></fieldset>
+    <img src="https://i.imgs.ovh/2026/09/10/c987311f92293885e4e69a302429390a.png">
+    </body>
 </html>
