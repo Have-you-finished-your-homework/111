@@ -1,67 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>文档标题</title>
+  <meta charset="UTF-8">
+  <title>我的混音播放器</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #fafafa;
+    }
+  </style>
 </head>
 <body>
-  按 <kbd>Ctrl</kbd> + <kbd>S</kbd> 保存
-	<h1>我的第一个HTML页面</h1>
-	<p>我的第一个段落。</p>
-<ruby>汉<rt>hàn</rt>字<rt>zì</rt></ruby><br>
-  H<sub>2</sub>O
-  <details>
-  <summary>点我展开</summary>
-  <p>这里是折叠内容。</p>
-  </details>
-  <dialog >
-  <p>我是一个 dialog，加 open 就显示。</p>
-</dialog>
-  <details>
-  <summary>更多信息</summary>
-  <ul>
-    <li>第一条</li>
-    <li>第二条</li>
-  </ul>
-</details>
-  <progress value=32 max="100">10%</progress>
-<meter value="0.10" min="0" max="1">70%</meter>
-  <fieldset>
-  <legend>登录信息</legend>
-  <input type="text" list="names" placeholder="选择名字">
-  <datalist id="names">
-    <option value="1"></option>
-    <option value="2"></option>
-    <option value="3"></option>
-  </datalist>
-  <fieldset>
-  <legend>登录信息</legend>
 
-  <input type="text" list="names" placeholder="输入名字">
-  <datalist id="names">
-    <option value="小明"></option>
-    <option value="小红"></option>
-    <option value="小刚"></option>
-  </datalist>
+  <div id="player-container">
+    <p style="color: #888;">正在加载歌单，请稍候...</p>
+  </div>
 
-  <input type="password" placeholder="密码">
-  <input type="checkbox"> 记住我
-  <button type="submit">提交</button>
-</fieldset>
- 
-    <svg width="100" height="100">
-  <circle cx="50" cy="50" r="45" fill="lightblue" stroke="red" stroke-width="10" />
-</svg>
+  <script>
+    // 标准化文字：转小写、去空格、去括号、去标点、去常见后缀
+    function normalize(str) {
+      return (str || '')
+        .toLowerCase()
+        .replace(/[\s\-_\(\)\[\]（）【】,.、·'"：:]/g, '')
+        .replace(/(live|remix|remaster(ed)?|伴奏|纯音乐|cover|翻自)/gi, '')
+        .trim();
+    }
 
-<canvas id="cv" width="100" height="100"></canvas>
-<script>
-  const canvas = document.getElementById('cv');
-  const ctx = canvas.getContext('2d');
+    // 兼容多种字段名，取歌名
+    function getSongName(song) {
+      return song.name || song.title || song.songname || '';
+    }
 
-  ctx.fillStyle = 'red';
-  ctx.fillRect(10, 10, 50, 50);
-</script>
-    <iframe srcdoc="<h3>Hello iframe</h3><p>我是嵌进来的小页面</p>"></iframe></fieldset>
-    <img src="https://i.imgs.ovh/2026/09/10/c987311f92293885e4e69a302429390a.png">
-    </body>
+    // 兼容字符串、数组、对象三种歌手格式
+    function getSongArtist(song) {
+      const a = song.artist || song.author || song.singer || '';
+      if (Array.isArray(a)) {
+        return a.map(x => typeof x === 'string' ? x : (x.name || '')).join('/');
+      }
+      if (a && typeof a === 'object') {
+        return a.name || '';
+      }
+      return String(a);
+    }
+
+    // 请求单个歌单
+    async function getPlaylist(server, id) {
+      const url = `https://meting.mikus.ink/api?server=${server}&type=playlist&id=${id}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(`✅ ${server} 加载成功，${data.length} 首`);
+        return Array.isArray(data) ? data : [];
+      } catch (e) {
+        console.log(`❌ ${server} 加载失败`, e);
+        return [];
+      }
+    }
+
+    // 同时拉两个歌单，合并、去重、播放
+    Promise.all([
+      getPlaylist('netease', '1989824770'),
+      getPlaylist('tencent', '2343079771')
+    ]).then(results => {
+      const allSongs = results.flat();
+
+      if (allSongs.length === 0) {
+        document.getElementById('player-container').innerHTML =
+          '<p style="color: red;">❌ 两个歌单都没加载出来，检查 API 和网络。</p>';
+        return;
+      }
+
+      // 去重：按标准化后的「歌名 + 歌手」
+      const map = new Map();
+      allSongs.forEach(song => {
+        const key = `${normalize(getSongName(song))}-${normalize(getSongArtist(song))}`;
+        if (!map.has(key)) {
+          map.set(key, song);
+        }
+      });
+      const uniqueSongs = Array.from(map.values());
+
+      console.log(`合并前 ${allSongs.length} 首，去重后 ${uniqueSongs.length} 首`);
+
+      // 转成 APlayer 需要的格式
+      const aplayerSongs = uniqueSongs.map(song => ({
+        name: getSongName(song),
+        artist: getSongArtist(song),
+        url: song.url || song.src || song.link || '',
+        cover: song.pic || song.cover || '',
+        lrc: song.lrc || song.lyric || ''
+      }));
+
+      // 清空加载提示
+      const container = document.getElementById('player-container');
+      container.innerHTML = '';
+
+      // 创建播放器
+      new APlayer({
+        container: container,
+        audio: aplayerSongs,
+        listFolded: false,
+        listMaxHeight: 300
+      });
+    });
+  </script>
+
+</body>
 </html>
