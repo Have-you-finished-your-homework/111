@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>来爽听</title>
+  <title>谁不想急头白脸听上这么几首</title>
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/aplayer/1.10.1/APlayer.min.css">
   <script src="https://cdn.bootcdn.net/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/meting/2.0.1/Meting.min.js"></script>
@@ -11,17 +11,17 @@
     body { font-family: sans-serif; margin: 0; padding: 40px; background: #fafafa; min-height: 100vh; }
     h1 { font-size: 20px; color: #333; }
 
-    #sidebar {
-      position: fixed; top: 0; left: 0;
-      width: 400px; max-width: 90vw; height: 100vh;
-      background: #fff;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.1);
-      transform: translateX(-100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 999;
-      display: flex; flex-direction: column; overflow: hidden;
-    }
-    #sidebar.open { transform: translateX(0); }
+   #sidebar {
+  position: fixed; top: 0; left: 0;
+  width: 400px; max-width: 90vw; height: 100vh;
+  background: #fff;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+#sidebar.open { transform: translateX(0); }
 
     #sidebar-header {
       padding: 16px 20px;
@@ -36,7 +36,7 @@
       color: #999; padding: 4px 8px; line-height: 1; border-radius: 6px;
       transition: all 0.2s;
     }
-    .icon-btn:hover { color: #333; background: #f0f0f0; }
+    .icon-btn:hover { color: #333; background:#0446FE  }
     #close-btn { font-size: 22px; }
 
     #sidebar-body { flex: 1; overflow-y: auto; padding: 12px; }
@@ -53,7 +53,7 @@
       height: 160px;
       border-radius: 50%;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 0 4px #fff, 0 0 0 6px #f0f0f0;
+      box-shadow: 0 4px 12px rgba(4,70,254,1)
       background: #eee;
       position: relative;
     }
@@ -137,7 +137,7 @@
       height: 52px;
       background: #0446FE;
       color: #fff;
-      box-shadow: 0 4px 12px rgba(4,70,254,1);
+      box-shadow: 0 4px 12px rgba(4,70,254,1)
     }
     .ctrl-btn.main:hover {
       background: #0446FE;
@@ -155,29 +155,82 @@
     #player-container .aplayer .aplayer-list { max-height: none !important; }
 
     #toggle-btn {
-      position: fixed; top: 28px; left: 28px; z-index: 1000;
-      width: 26px; height: 34px; border: none; background: #0446FE;
-      clip-path: polygon(100% 0, 100% 100%, 0 50%);
-      cursor: pointer; padding: 0;
-      transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                  clip-path 0.35s ease,
-                  filter 0.3s ease;
-      filter: drop-shadow(0 3px 8px rgba(29,185,84,0.45));
-    }
-    #toggle-btn:hover { filter: drop-shadow(0 4px 14px rgba(29,185,84,0.75)); }
-    #sidebar.open ~ #toggle-btn { left: 430px; clip-path: polygon(0 0, 0 100%, 100% 50%); }
+  position: fixed; top: 28px; left: 28px; z-index: 1000;
+  width: 26px; height: 34px; border: none; background: #0446fe;
+  clip-path: polygon(100% 0, 100% 100%, 0 50%);
+  cursor: pointer; padding: 0;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              clip-path 0.35s ease,
+              filter 0.3s ease;
+  filter: drop-shadow(0 3px 8px rgba(4,70,254,0.35));
+}
+#toggle-btn:hover { filter: drop-shadow(0 4px 14px rgba(4,70,254,0.6)); }
 
-    #status { font-size: 12px; color: #888; padding: 8px 12px; }
+/* ④ 按钮打开位置：跟着侧边栏宽度走 */
+#sidebar.open ~ #toggle-btn {
+ left: calc(min(400px, 90vw) + 6px);
+  clip-path: polygon(0 0, 0 100%, 100% 50%);
+}
+
+@media (max-width: 600px) {
+  body { padding: 18px 16px 18px 60px; }
+
+  h1 { font-size: 18px; }
+
+  /* 侧边栏占满大半屏，右侧留出按钮位置 */
+  #sidebar {
+    width: 88vw;
+    max-width: 88vw;
+    height: 100vh;
+    height: 100dvh;   /* 支持时用动态视口，避开手机地址栏 */
+  }
+
+  /* 按钮跟着侧边栏宽度走 */
+  #sidebar.open ~ #toggle-btn {
+    left: calc(88vw + 6px);
+  }
+
+  /* 按钮缩小一点，避开标题 */
+  #toggle-btn {
+    top: 16px;
+    left: 16px;
+    width: 22px;
+    height: 30px;
+  }
+
+  /* 顶部信息区压缩 */
+  #sidebar-header { padding: 12px 16px; }
+  #sidebar-body   { padding: 8px; }
+  #now-playing    { padding: 16px 8px 12px; }
+
+  .cover-wrap { width: 120px; height: 120px; }
+
+  #now-title  { margin-top: 10px; font-size: 13px; }
+  #now-artist { font-size: 11px; }
+
+  /* 控制按钮组紧凑一点 */
+  #controls { gap: 16px; margin-top: 12px; }
+  .ctrl-btn svg { width: 24px; height: 24px; }
+  .ctrl-btn.main { width: 46px; height: 46px; }
+  .ctrl-btn.main svg { width: 20px; height: 20px; }
+
+  /* 列表高度限制，避免撑破侧边栏 */
+  #player-container .aplayer .aplayer-list {
+    max-height: 45vh !important;
+  }
+}
+
+
   </style>
 </head>
 <body>
 
-  <h1>Hiiiiiii</h1>
+  <h1>♪（-u- ）♪</h1>
   <p style="color:#666;">点击爽听 ←</p>
 
-  <div id="sidebar">
+  <div id="sidebar" class="open">
     <div id="sidebar-header">
-      <h2>🎵 my music</h2>
+      <h2>我的歌单</h2>
       <button id="close-btn" class="icon-btn" onclick="toggleSidebar()">×</button>
     </div>
     <div id="sidebar-body">
@@ -212,6 +265,14 @@
   <script>
     let ap = null;
 
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('open');
     }
@@ -306,7 +367,8 @@
     }
 
     async function getPlaylist(server, id) {
-      const url = `https://meting.mikus.ink/api?server=${server}&type=playlist&id=${id}`;
+      // 这里把 server 和 id 拼接到 URL 上了！
+      const url = `https://api.injahow.cn/meting/?server=${server}&type=playlist&id=${id}`;
       try {
         const res = await fetch(url);
         const text = await res.text();
@@ -315,15 +377,14 @@
           console.log(`✅ ${server} 拿到 ${data.length} 首`);
           return Array.isArray(data) ? data : [];
         } catch (e) {
-          console.log(`❌ ${server} 返回的不是 JSON`);
+          console.log(`❌ ${server} 返回的不是 JSON，返回内容：`, text.slice(0, 100));
           return [];
         }
       } catch (e) {
-        console.log(`❌ ${server} 请求失败`);
+        console.log(`❌ ${server} 请求失败`, e);
         return [];
       }
     }
-
     function dedupe(songs) {
       const unique = [];
       const nameIndex = new Map();
@@ -420,7 +481,7 @@
       container.innerHTML = '';
       ap = new APlayer({
         container: container,
-        audio: aplayerSongs,
+        audio: shuffle(aplayerSongs),
         listFolded: false,
         listMaxHeight: 400,
         fixed: false,
